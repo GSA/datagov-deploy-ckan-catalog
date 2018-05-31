@@ -1,0 +1,45 @@
+---
+- name: Install Jekyll Apps
+  hosts: jekyll-web
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+
+  vars:
+    ruby_version: "2.3.0"
+    gemset: "jekyll"
+    jekyll_apps:
+      - {
+          name: "sdg-indicators",
+          repo: "https://github.com/GSA/sdg-indicators/",
+          config: "_config_prod.yml",
+          branch: "master",
+          port: 8000,
+          s3_bucket: "{{ s3_bucket_sdg | default('') }}",
+          secret_key: "{{ jekyll_webhook_secret | default('') }}"
+        }
+      - {
+          name: "data-federation",
+          repo: "https://github.com/GSA/us-data-federation",
+          config: "_config_prod.yml",
+          branch: "master",
+          port: 8001,
+          s3_bucket: "{{ s3_bucket_federation | default('') }}",
+          secret_key: "{{ jekyll_webhook_secret | default('') }}"
+        }
+
+  roles:
+    - software/ubuntu/common
+    - {role: software/common/secops-ssh, tags: ['secops'] }
+    - {role: software/common/trendmicro, tags: ['trendmicro'] }
+    - {role: monitoring/fluentd/kernel, tags: ['frontend', 'harvester', 'fluentd'] }
+    - {role: monitoring/fluentd/limits, tags: ['frontend', 'harvester', 'fluentd'] }
+    - {role: monitoring/fluentd/td-agent, tags: ['frontend', 'harvester', 'fluentd'] }
+    - {role: software/common/misc, tags: ['misc'] }
+    - software/ckan/apache
+    - { role: gsa.rvm1-ruby,
+        rvm1_rvm_check_for_updates: False,
+        rvm1_rubies: ['ruby-{{ruby_version}}'],
+      }
+    - software/jekyll
+

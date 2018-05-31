@@ -1,0 +1,17 @@
+---
+- name: install supervisor
+  action: pip name=supervisor
+
+- name: copy all needed files
+  copy:
+    src: etc/init/supervisor.conf
+    dest: /etc/init/supervisor.conf
+  notify:
+    - restart supervisord
+
+- name: copy template files
+  template:
+    src: etc/supervisord.conf.j2
+    dest: /etc/supervisord.conf
+  notify:
+    - update supervisorctl
