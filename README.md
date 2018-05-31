@@ -1,7 +1,14 @@
-# Data.gov Deploy
-[![CircleCI](https://circleci.com/gh/GSA/datagov-deploy.svg?style=svg)](https://circleci.com/gh/GSA/datagov-deploy)
+# CKAN Catalog App Datagov Deploy Repository
 
-This main repository for Data.gov's stack deployment onto AWS Infrastructure. The responsitory is broken into the following roles all created/provisioned using [Ansible](http://docs.ansible.com/ansible/intro_installation.html):
+**Repository:** [datagov-deploy-ckan-catalog-app](https://github.com/GSA/datagov-deploy-ckan-catalog-app/ "Title")
+
+[WIP] Refactoring Ansible deployment for each component - Ansible playbook for [Data.gov](https://www.data.gov/ "Title")
+
+This repository for the stack deployment onto AWS Infrastructure for the CKAN Catalog app. It is related to the CKAN Common and CKAN Inventory repos as well.
+
+The responsitory is broken into the following roles all created/provisioned using [Ansible](http://docs.ansible.com/ansible/intro_installation.html):
+
+_Everything below here will be edited as this repo is culled and reconfigured._
 
 Included in this Repository:
   - Software
@@ -53,7 +60,7 @@ Moved to [datagov-infrastructure](https://github.com/gsa/datagov-infrastructure)
 
 `cd ansible`
 
-`ansible-playbook --help` 
+`ansible-playbook --help`
 
 See example(s) below
 
@@ -66,7 +73,7 @@ See example(s) below
 **deploy rollback:** `ansible-playbook datagov-web.yml -i {{ inventory }} --tags="deploy-rollback" --limit wordpress-web`
 
 - You can override branch to be deployed via `-e project_git_version=develop`
-  
+
   ***e.g.*** `ansible-playbook datagov-web.yml -i inventories/staging/hosts --tags=deploy --limit wordpress-web -e project_git_version=develop`
 
 ## Dashboard
