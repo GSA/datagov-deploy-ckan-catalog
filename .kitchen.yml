@@ -34,24 +34,28 @@ transport:
 
 platforms:
  # Ubuntu Trusty with Upstart
-  - name: ubuntu-14.04
-    #driver_config:
-    #  image: rndmh3ro/docker-ubuntu1404-ansible:latest
-    #  platform: ubuntu
-  # Ubuntu Xenial with Systemd
-  - name: ubuntu-16.04
-    #driver_config:
-    #  image: rndmh3ro/docker-ubuntu1604-ansible:latest
-    #  platform: ubuntu
-
-suites:
-  - name: dev-catalog23
+  - name: u-trusty-dk
+    driver_config:
+      image: rndmh3ro/docker-ubuntu1404-ansible:latest
+      platform: ubuntu
+  - name: u-trusty-vb
     driver:
       name: vagrant
-  - name: dev-catalog28
-  - name: test-catalog23
-  - name: test-catalog28
-  - name: staging-catalog23
-  - name: staging-catalog28
-  - name: prod-catalog23
-  - name: prod-catalog28
+      box: ubuntu/trusty64
+      box_check_update: true
+  # Ubuntu Xenial with Systemd
+  - name: u-xenial-dk
+    driver_config:
+     image: rndmh3ro/docker-ubuntu1604-ansible:latest
+     platform: ubuntu
+  - name: u-xenial-vb
+    driver:
+      name: vagrant
+      box: ubuntu/xenial64
+
+suites:
+  - name: dev-cat
+  - name: test-cat
+  - name: stage-cat
+  - name: prod-cat
+
