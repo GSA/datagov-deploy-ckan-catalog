@@ -7,18 +7,19 @@ driver:
 transport:
   max_ssh_sessions: 5
 
-#provisioner:
-#  name: ansible_playbook
-#  playbook: test.yml
-#  roles_path: ../ansible/roles/
-#  hosts: all
-#  ansible_vault_password_file: ansible-secret.txt
-#  require_ansible_repo: false
-#  require_ansible_omnibus: true
-#  ansible_verbose: true
-#  ansible_diff: true
-#  ansible_verbosity: 2
-#  idempotency_test: true
+provisioner:
+  name: ansible_playbook
+  roles_path: catalog/
+  requirements_path: requirements.yml
+  hosts: all
+  playbook: tests/test.yml
+  ansible_vault_password_file: ansible-secret.txt
+  require_ansible_repo: false
+  require_ansible_omnibus: true
+  ansible_verbose: true
+  ansible_diff: true
+  ansible_verbosity: 2
+  idempotency_test: true
   #ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
   #ansible_version:
   #custom_pre_install_command:	nil	Custom shell command to be used at beginning of install stage. Can be multiline.
@@ -34,21 +35,25 @@ transport:
 
 platforms:
  # Ubuntu Trusty with Upstart
-  - name: u-trusty-dk
+  - name: ckan23-dk
     driver_config:
       image: rndmh3ro/docker-ubuntu1404-ansible:latest
       platform: ubuntu
-  - name: u-trusty-vb
+  - name: ckan23-vb
     driver:
       name: vagrant
       box: ubuntu/trusty64
       box_check_update: true
   # Ubuntu Xenial with Systemd
-  - name: u-xenial-dk
+  - name: ckan28-gsa-dk
     driver_config:
      image: rndmh3ro/docker-ubuntu1604-ansible:latest
      platform: ubuntu
-  - name: u-xenial-vb
+  - name: ckan28-mas-dk
+    driver_config:
+     image: rndmh3ro/docker-ubuntu1604-ansible:latest
+     platform: ubuntu
+  - name: ckan28-gsa-vb
     driver:
       name: vagrant
       #pre_create_command: cp .vagrant_plugins.json {{vagrant_root}}/ && vagrant plugin bundle
@@ -56,18 +61,29 @@ platforms:
       box: ubuntu/xenial64
       box_check_update: true
       provision: hostmanager
-      #vagrantfiles:
-      #  - u-xenial-vb/Vagrantfile.rb
-      vm_hostname: catalog.local
+      vm_hostname: catalog-gsa.local
       #gui: false
       customize:
         memory: 4096
       network:
         - ["private_network", {ip: 192.168.10.82}]
+  - name: ckan28-mas-vb
+    driver:
+      name: vagrant
+      #pre_create_command: cp .vagrant_plugins.json {{vagrant_root}}/ && vagrant plugin bundle
+      use_vagrant_hostmanager_plugin: true
+      box: ubuntu/xenial64
+      box_check_update: true
+      vm_hostname: catalog-mas.local
+      #gui: false
+      customize:
+        memory: 4096
+      network:
+        - ["private_network", {ip: 192.168.10.81}]
 
 suites:
-  - name: dev-cat
-  - name: test-cat
-  - name: stage-cat
-  - name: prod-cat
+  - name: dev
+  - name: test
+  - name: stage
+  - name: prod
 
